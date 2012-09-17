@@ -14,9 +14,9 @@ args = parser.parse_args()
 
 #----------------------------------------------------------------------------------
 # Project-specific constants
-URL_LIST_PATH = args.urls or 'url_list.txt'
-SITE_ROOT = args.root or 'http://www.yoursite.com'
-REPORT = codecs.open(args.report or 'requests-%s.txt' % (datetime.now().strftime('%m%d%y')), 'w', 'utf-8')
+URL_LIST_PATH = args.urls or 'urls.txt'
+SITE_ROOT = '' if args.root == 'ABSOLUTE' else args.root or 'http://www.yoursite.com'
+REPORT = codecs.open(args.report or 'report-%s.txt' % (datetime.now().strftime('%m%d%y')), 'w', 'utf-8')
 #----------------------------------------------------------------------------------
 
 def id_generator(size=6, chars=string.ascii_uppercase + string.digits):

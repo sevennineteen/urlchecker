@@ -1,6 +1,7 @@
 import argparse
 import codecs
 import httplib2
+import urllib
 import lxml.html
 from datetime import datetime
 import string
@@ -10,6 +11,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--urls', help="Path to file including URLs to check")
 parser.add_argument('--root', help="Root URL to prepend to URLs")
 parser.add_argument('--report', help="File for report output")
+#parser.add_argument('--certs', help="Perform SSL certificate validation")
 args = parser.parse_args()
 
 #----------------------------------------------------------------------------------
@@ -48,7 +50,7 @@ def check_url(url, prefix=''):
     try:
         test_result.append(prefix + url)
         
-        http = httplib2.Http(timeout=10)
+        http = httplib2.Http(timeout=10, disable_ssl_certificate_validation=True)
         http.follow_redirects = False
         response, content = http.request(url, headers={'User-Agent': 'Python-urllib 3.1-%s' % RANDOM_STRING})
         
@@ -78,7 +80,7 @@ report('\t'.join(['URL', 'STATUS CODE', 'TITLE/LOCATION']))
 
 f = open(URL_LIST_PATH, 'r')
 for url in [x for x in f.readlines() if x[0] != '#']:
-    check_url(SITE_ROOT + url.strip())
+    check_url(SITE_ROOT + urllib.quote(url.strip()))
 f.close()
 
 REPORT.close()
